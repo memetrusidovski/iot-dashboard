@@ -1,0 +1,16 @@
+{
+  "name": "fullstack",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently -n backend,frontend -c bgBlue.white,bgMagenta.white \"npm run server\" \"npm run client\"",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "install-client": "npm install --prefix frontend",
+    "install-server": "npm install --prefix backend",
+    "postinstall": "npm run install-client && npm run install-server"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.1"
+  }
+}

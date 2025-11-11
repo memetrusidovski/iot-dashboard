@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .feature-list { color: #2c3e50; }
+        .time { color: #7f8c8d; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <p><strong><%= message %></strong></p>
+    
+    <h2>Our Services:</h2>
+    <ul class="feature-list">
+        <% features.forEach(function(feature) { %>
+            <li><%= feature %></li>
+        <% }); %>
+    </ul>
+    
+    <p class="time">Page loaded at: <%= currentTime %></p>
+    
+    <nav>
+        <a href="/users">View Users</a> | 
+        <a href="/users/create">Create User</a> | 
+        <a href="/api/hello">API Test</a>
+    </nav>
+</body>
+</html>
