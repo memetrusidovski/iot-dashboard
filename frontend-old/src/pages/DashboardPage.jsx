@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react';
-import { Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Zap, Plus } from 'lucide-react';
 import useSensorStore from '../store/useSensorStore';
 import useWebSocket from '../hooks/useWebSocket';
 
 // Component Imports
-import SensorCard from '../components/SensorCard';
+import SensorCard from '../components/Sensors/SensorCard';
 import StatusIndicator from '../components/StatusIndicator';
-import SensorChart from '../components/SensorChart';
+import SensorChart from '../components/Sensors/SensorChart';
 import DeviceCard from '../components/Devices/DeviceCard';
+import AddDeviceModal from '../components/modals/AddDeviceModal';
+import ThemeSwitcher from '../components/ThemeSwitcher';
 
 const DashboardPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Select all necessary state and actions from the Zustand store
   const {
     currentUser,
@@ -33,9 +37,10 @@ const DashboardPage = () => {
 
   // Derive lists of keys for rendering, ensuring they are stable
   const sensorNames = Object.keys(sensorHistory);
-  const deviceIds = Object.keys(devices);
+  const deviceIds = Object.keys(useSensorStore(state => state.devices));
 
   return (
+    <>
     <div className="min-h-screen bg-gray-50">
       {/* ===== HEADER ===== */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -56,6 +61,7 @@ const DashboardPage = () => {
 
             {/* Right side: Status and Logout */}
             <div className="flex items-center space-x-4">
+                <ThemeSwitcher />
               <StatusIndicator status={connectionStatus} />
               <button
                 onClick={handleLogout}
@@ -73,6 +79,13 @@ const DashboardPage = () => {
         {/* --- Device Controls Section --- */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Device Controls</h2>
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              >
+                <Plus size={16} />
+                <span>Add Device</span>
+            </button>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {deviceIds.length > 0 ? (
               deviceIds.map(deviceId => (
@@ -120,6 +133,16 @@ const DashboardPage = () => {
         </section>
       </main>
     </div>
+
+    {/* ===== MODAL ===== */}
+      {/* Render the modal outside the main layout */}
+      <AddDeviceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      </>
+    
   );
 };
 

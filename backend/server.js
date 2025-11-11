@@ -16,7 +16,7 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 3001;
 const MAX_HISTORY_LENGTH = 250;
-const MQTT_BROKER = 'mqtt://test.mosquitto.org';
+const MQTT_BROKER = 'mqtt://localhost:1883';
 // -----------END: Server Configuration-----------
 
 // -----------START: Middleware Setup-----------
@@ -90,10 +90,25 @@ mqttClient.on('message', (topic, message) => {
       history.shift();
     }
 
+    // Check if sensor value exceeds configured limits
+    const alert = db.checkSensorLimits(userId, sensorName, data.value);
+    
     // Broadcast to user's WebSocket connection for real-time updates
     const userConnection = db.userData[userId].ws;
     if (userConnection && userConnection.readyState === WebSocket.OPEN) {
+      // Send sensor data update
       userConnection.send(JSON.stringify({ topic, data }));
+      
+      // Send alert if limit exceeded
+      if (alert) {
+        console.log(`[ALERT] ${userId} - ${alert.message}`);
+        userConnection.send(JSON.stringify({ 
+          type: 'sensor_alert',
+          userId,
+          alert,
+          timestamp: Date.now()
+        }));
+      }
     }
   } catch (err) {
     console.error('[MQTT] Error processing message:', err);
@@ -184,6 +199,102 @@ app.get('/api/users/:userId/sensors/:sensorName/history', (req, res) => {
   res.json(history);
 });
 // -----------END: Sensor API Endpoints-----------
+
+// -----------START: Alert/Limit API Endpoints-----------
+/**
+ * GET /api/users/:userId/sensors/limits
+ * Retrieve all sensor limits for a user
+ * 
+ * @route GET /api/users/:userId/sensors/limits
+ * @param {string} userId - User identifier from URL
+ * @returns {Object} Object containing all sensor limits
+ * @returns {404} If user not found
+ */
+app.get('/api/users/:userId/sensors/limits', (req, res) => {
+  const { userId } = req.params;
+  const limits = db.getSensorLimits(userId);
+  
+  if (!limits) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  
+  res.json({ userId, limits });
+});
+
+/**
+ * GET /api/users/:userId/sensors/:sensorName/limits
+ * Retrieve limits for a specific sensor
+ * 
+ * @route GET /api/users/:userId/sensors/:sensorName/limits
+ * @param {string} userId - User identifier from URL
+ * @param {string} sensorName - Sensor name from URL
+ * @returns {Object} Sensor limit configuration
+ * @returns {404} If user or sensor limits not found
+ */
+app.get('/api/users/:userId/sensors/:sensorName/limits', (req, res) => {
+  const { userId, sensorName } = req.params;
+  const limits = db.getSensorLimit(userId, sensorName);
+  
+  if (!limits) {
+    return res.status(404).json({ error: 'User or sensor limits not found' });
+  }
+  
+  res.json({ userId, sensorName, limits });
+});
+
+/**
+ * POST /api/users/:userId/sensors/:sensorName/limits
+ * Update limits for a specific sensor
+ * 
+ * @route POST /api/users/:userId/sensors/:sensorName/limits
+ * @param {string} userId - User identifier from URL
+ * @param {string} sensorName - Sensor name from URL
+ * @body {Object} limits - Limit configuration
+ * @body {number} limits.min - Minimum threshold (optional)
+ * @body {number} limits.max - Maximum threshold (optional)
+ * @body {boolean} limits.enabled - Enable/disable alerts (optional)
+ * 
+ * @example
+ * // Update temperature limits
+ * { min: 18, max: 28, enabled: true }
+ * 
+ * // Disable alerts for a sensor
+ * { enabled: false }
+ * 
+ * @returns {Object} Success status and updated limits
+ * @returns {404} If user not found
+ */
+app.post('/api/users/:userId/sensors/:sensorName/limits', (req, res) => {
+  const { userId, sensorName } = req.params;
+  const limits = req.body;
+  
+  console.log(`[Limit Update] User: ${userId}, Sensor: ${sensorName}`, limits);
+  
+  const result = db.updateSensorLimit(userId, sensorName, limits);
+  
+  if (!result.success) {
+    return res.status(404).json({ error: result.error });
+  }
+  
+  // Broadcast to WebSocket for real-time UI updates
+  const userConnection = db.userData[userId].ws;
+  if (userConnection && userConnection.readyState === WebSocket.OPEN) {
+    userConnection.send(JSON.stringify({
+      type: 'limits_updated',
+      userId,
+      sensorName,
+      limits: result.limits
+    }));
+  }
+  
+  res.json({ 
+    success: true, 
+    userId, 
+    sensorName, 
+    limits: result.limits 
+  });
+});
+// -----------END: Alert/Limit API Endpoints-----------
 
 // -----------START: Route Imports-----------
 const userRoutes = require('./routes/index');

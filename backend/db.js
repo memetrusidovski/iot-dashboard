@@ -6,6 +6,7 @@
  * Central user data structure containing:
  * - ws: WebSocket connection for real-time updates
  * - sensorDataHistory: Historical sensor readings
+ * - sensorLimits: Alert thresholds for each sensor
  * - devices: Smart home devices and their states
  */
 const userData = {
@@ -14,6 +15,10 @@ const userData = {
     sensorDataHistory: { 
       temperature: [], 
       humidity: [] 
+    },
+    sensorLimits: {
+      temperature: { min: 18, max: 28, enabled: true },
+      humidity: { min: 30, max: 60, enabled: true }
     },
     devices: {
       living_room_light: {
@@ -60,6 +65,10 @@ const userData = {
       pressure: [], 
       light_level: [] 
     },
+    sensorLimits: {
+      pressure: { min: 1000, max: 1030, enabled: true },
+      light_level: { min: 200, max: 1200, enabled: true }
+    },
     devices: {
       kitchen_light: {
         type: 'light',
@@ -98,6 +107,10 @@ const userData = {
     sensorDataHistory: { 
       temperature: [], 
       co2: [] 
+    },
+    sensorLimits: {
+      temperature: { min: 15, max: 25, enabled: true },
+      co2: { min: 400, max: 800, enabled: true }
     },
     devices: {
       porch_light: {
@@ -252,6 +265,93 @@ const getUserSensors = (userId) => {
 };
 // -----------END: Sensor Helper Functions-----------
 
+// -----------START: Alert/Limit Helper Functions-----------
+/**
+ * Get all sensor limits for a user
+ * @param {string} userId - The user identifier
+ * @returns {Object|null} Sensor limits object or null if user not found
+ */
+const getSensorLimits = (userId) => {
+  if (!userData[userId] || !userData[userId].sensorLimits) return null;
+  return userData[userId].sensorLimits;
+};
+
+/**
+ * Get limits for a specific sensor
+ * @param {string} userId - The user identifier
+ * @param {string} sensorName - The sensor name
+ * @returns {Object|null} Sensor limit configuration or null if not found
+ */
+const getSensorLimit = (userId, sensorName) => {
+  if (!userData[userId] || !userData[userId].sensorLimits) return null;
+  return userData[userId].sensorLimits[sensorName] || null;
+};
+
+/**
+ * Update limits for a specific sensor
+ * @param {string} userId - The user identifier
+ * @param {string} sensorName - The sensor name
+ * @param {Object} limits - Limit configuration { min, max, enabled }
+ * @returns {Object} Result object with success status and updated limits
+ */
+const updateSensorLimit = (userId, sensorName, limits) => {
+  if (!userData[userId]) {
+    return { success: false, error: 'User not found' };
+  }
+  
+  if (!userData[userId].sensorLimits) {
+    userData[userId].sensorLimits = {};
+  }
+  
+  if (!userData[userId].sensorLimits[sensorName]) {
+    userData[userId].sensorLimits[sensorName] = { enabled: true };
+  }
+  
+  // Update limit fields
+  const currentLimits = userData[userId].sensorLimits[sensorName];
+  if (limits.min !== undefined) currentLimits.min = limits.min;
+  if (limits.max !== undefined) currentLimits.max = limits.max;
+  if (limits.enabled !== undefined) currentLimits.enabled = limits.enabled;
+  
+  return { success: true, limits: currentLimits };
+};
+
+/**
+ * Check if sensor value exceeds configured limits
+ * @param {string} userId - The user identifier
+ * @param {string} sensorName - The sensor name
+ * @param {number} value - Sensor value to check
+ * @returns {Object|null} Alert object if limit exceeded, null otherwise
+ */
+const checkSensorLimits = (userId, sensorName, value) => {
+  const limits = getSensorLimit(userId, sensorName);
+  
+  if (!limits || !limits.enabled) return null;
+  
+  if (limits.min !== undefined && value < limits.min) {
+    return {
+      type: 'below_minimum',
+      sensorName,
+      value,
+      limit: limits.min,
+      message: `${sensorName} is below minimum threshold (${value} < ${limits.min})`
+    };
+  }
+  
+  if (limits.max !== undefined && value > limits.max) {
+    return {
+      type: 'above_maximum',
+      sensorName,
+      value,
+      limit: limits.max,
+      message: `${sensorName} is above maximum threshold (${value} > ${limits.max})`
+    };
+  }
+  
+  return null;
+};
+// -----------END: Alert/Limit Helper Functions-----------
+
 // -----------START: Module Exports-----------
 module.exports = {
   userData,
@@ -261,6 +361,10 @@ module.exports = {
   addUserDevice,
   deleteUserDevice,
   getSensorHistory,
-  getUserSensors
+  getUserSensors,
+  getSensorLimits,
+  getSensorLimit,
+  updateSensorLimit,
+  checkSensorLimits
 };
 // -----------END: Module Exports-----------

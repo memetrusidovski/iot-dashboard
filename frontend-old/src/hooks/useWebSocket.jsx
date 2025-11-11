@@ -3,7 +3,7 @@ import useSensorStore from '../store/useSensorStore';
 
 const useWebSocket = (userId) => {
   // Get all necessary actions from the store
-  const { setConnectionStatus, updateSensorData, updateDeviceState, logout } = useSensorStore();
+  const { setConnectionStatus, updateSensorData, updateDeviceState, removeDevice, logout, setSensorLimit, setActiveAlert } = useSensorStore();
 
   useEffect(() => {
     if (!userId) return;
@@ -21,12 +21,17 @@ const useWebSocket = (userId) => {
       try {
         const message = JSON.parse(event.data);
         
-        // --- THIS IS THE KEY CHANGE ---
         // Check the message type to decide which store action to call
         if (message.type === 'device_update') {
           updateDeviceState(message.deviceId, message.device);
+        } else if (message.type === 'device_deleted') { // NEW: Handle deletion
+          removeDevice(message.deviceId);
+        } else if (message.type === 'limits_updated') {
+          setSensorLimit(message.sensorName, message.limits);
+        } else if (message.type === 'sensor_alert') {
+          setActiveAlert(message.alert);
         } else {
-          // Assume it's a sensor update for backward compatibility
+          // Assume it's a sensor update
           updateSensorData(message.topic, message.data);
         }
       } catch (error) {
@@ -37,7 +42,7 @@ const useWebSocket = (userId) => {
     return () => {
       if (socket) socket.close();
     };
-  }, [userId, setConnectionStatus, updateSensorData, updateDeviceState]);
+  }, [userId, setConnectionStatus, updateSensorData, updateDeviceState, removeDevice, logout, setSensorLimit, setActiveAlert]);
   
   // Renaming to handleLogout for clarity, as it triggers a full logout/cleanup
   const handleLogout = () => {

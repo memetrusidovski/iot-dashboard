@@ -2,10 +2,19 @@
 // Simulates sensor data for multiple users and publishes to MQTT broker
 
 const mqtt = require('mqtt');
+const db = require('./db');
 
 // -----------START: MQTT Configuration-----------
-const MQTT_BROKER = 'mqtt://test.mosquitto.org';
-const PUBLISH_INTERVAL = 3000; // Publish every 3 seconds
+const MQTT_BROKER = 'mqtt://localhost:1883';
+const PUBLISH_INTERVAL = 3000;
+
+const MQTT_OPTIONS = {
+    username: 'my_user',
+    password: 'my_password',
+    clientId: 'iot_simulator_' + Math.random().toString(16).substr(2, 8)
+};
+
+// const client = mqtt.connect(MQTT_BROKER, MQTT_OPTIONS);
 const client = mqtt.connect(MQTT_BROKER);
 // -----------END: MQTT Configuration-----------
 

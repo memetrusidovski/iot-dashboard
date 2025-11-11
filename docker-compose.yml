@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"  # MQTT
+      - "9001:9001"  # Websockets
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - app-network
+
+  # Backend API
+  backend:
+    build: ./backend
+    container_name: node-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - MQTT_BROKER_URL=mqtt://mosquitto:1883
+      - PORT=3001
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Frontend React App
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "4173:4173"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+      - VITE_WS_URL=ws://localhost:3001
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
