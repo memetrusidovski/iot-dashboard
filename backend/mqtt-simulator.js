@@ -5,7 +5,7 @@ const mqtt = require('mqtt');
 const db = require('./db');
 
 // -----------START: MQTT Configuration-----------
-const MQTT_BROKER = 'mqtt://localhost:1883';
+const MQTT_BROKER = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
 const PUBLISH_INTERVAL = 3000;
 
 const MQTT_OPTIONS = {

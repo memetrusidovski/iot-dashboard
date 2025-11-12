@@ -16,7 +16,7 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 3001;
 const MAX_HISTORY_LENGTH = 250;
-const MQTT_BROKER = 'mqtt://localhost:1883';
+const MQTT_BROKER = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
 // -----------END: Server Configuration-----------
 
 // -----------START: Middleware Setup-----------

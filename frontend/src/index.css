@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* ============================================
+   THEME COLORS - Tailwind v4 Format
+   ============================================ */
+@theme {
+  /* Semantic color tokens that Tailwind will generate utilities for */
+  --color-background: oklch(98% 0.008 250);
+  --color-foreground: oklch(25% 0.015 250);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(25% 0.015 250);
+  --color-border: oklch(92% 0.004 250);
+  --color-input: oklch(92% 0.004 250);
+  --color-ring: oklch(60% 0.19 260);
+  
+  /* Primary - changes with theme */
+  --color-primary: oklch(60% 0.19 260);
+  --color-primary-foreground: oklch(100% 0 0);
+  
+  /* Secondary */
+  --color-secondary: oklch(96% 0.008 250);
+  --color-secondary-foreground: oklch(25% 0.015 250);
+  
+  /* Muted */
+  --color-muted: oklch(96% 0.008 250);
+  --color-muted-foreground: oklch(50% 0.015 250);
+  
+  /* Accent */
+  --color-accent: oklch(96% 0.008 250);
+  --color-accent-foreground: oklch(25% 0.015 250);
+  
+  /* Destructive */
+  --color-destructive: oklch(60% 0.22 25);
+  --color-destructive-foreground: oklch(100% 0 0);
+}
+
+/* ============================================
+   COLOR THEME OVERRIDES
+   ============================================ */
+[data-theme='blue'] {
+  --color-primary: oklch(60% 0.19 260);
+  --color-ring: oklch(60% 0.19 260);
+}
+
+[data-theme='green'] {
+  --color-primary: oklch(55% 0.16 150);
+  --color-ring: oklch(55% 0.16 150);
+}
+
+[data-theme='red'] {
+  --color-primary: oklch(55% 0.22 25);
+  --color-ring: oklch(55% 0.22 25);
+}
+
+[data-theme='yellow'] {
+  --color-primary: oklch(75% 0.15 90);
+  --color-primary-foreground: oklch(25% 0.015 250);
+  --color-ring: oklch(75% 0.15 90);
+}
+
+[data-theme='purple'] {
+  --color-primary: oklch(60% 0.24 300);
+  --color-ring: oklch(60% 0.24 300);
+}
+
+[data-theme='orange'] {
+  --color-primary: oklch(65% 0.19 50);
+  --color-ring: oklch(65% 0.19 50);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+.dark {
+  --color-background: oklch(20% 0.015 250);
+  --color-foreground: oklch(98% 0.008 250);
+  --color-card: oklch(25% 0.015 250);
+  --color-card-foreground: oklch(98% 0.008 250);
+  --color-border: oklch(30% 0.015 250);
+  --color-input: oklch(30% 0.015 250);
+  --color-secondary: oklch(30% 0.015 250);
+  --color-secondary-foreground: oklch(98% 0.008 250);
+  --color-muted: oklch(30% 0.015 250);
+  --color-muted-foreground: oklch(65% 0.015 250);
+  --color-accent: oklch(30% 0.015 250);
+  --color-accent-foreground: oklch(98% 0.008 250);
+  --color-destructive: oklch(45% 0.18 25);
+  --color-destructive-foreground: oklch(98% 0.008 250);
+}
+
+/* ============================================
+   SMOOTH TRANSITIONS
+   ============================================ */
+* {
+  transition: background-color 0.2s ease, 
+              color 0.2s ease, 
+              border-color 0.2s ease;
+}
+
+.theme-transitioning * {
+  transition: none !important;
+}

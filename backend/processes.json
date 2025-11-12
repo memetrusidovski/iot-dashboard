@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "name": "api-server",
+      "script": "server.js",
+      "instances": 1,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "mqtt-simulator",
+      "script": "mqtt-simulator.js",
+      "instances": 1,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
