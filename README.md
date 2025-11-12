@@ -5,9 +5,11 @@ This repo can be run in Docker or directly with Node. The intended use is with D
 ### Running with Docker
 
 To run with Docker cd into the repo, then run:
-```
-docker-compose up -d --build
-```
+
+`docker-compose up -d --build`
+
+and to remove:
+`docker-compose down`
 
 ### Running on Linux
 
@@ -30,7 +32,7 @@ This will let you know if the server is running:
 `sudo systemctl status mosquitto.service`
 
 ##### Run The Server
-`npm run postinstall` at the root
+`npm install && npm run postinstall` at the root
 
 `npm run start` 
 
