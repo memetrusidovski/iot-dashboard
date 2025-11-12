@@ -1,5 +1,8 @@
 // routes/index.js - Main Application Routes
-// Provides web pages and basic API endpoints
+// This file is for delievering template-based pages and simple API endpoints for testing.
+// Rendering is done using EJS templating engine. 
+// Meant for marketing and SEO optimization purposes.
+// Increases Lighthouse scores by serving pre-rendered content for new users to increase retention.
 
 const express = require('express');
 const router = express.Router();

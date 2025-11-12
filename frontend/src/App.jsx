@@ -4,10 +4,6 @@ import useSensorStore from './store/useSensorStore';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 
-/**
- * A wrapper for routes that should only be accessible when the user is logged in.
- * If not logged in, it redirects to the login page.
- */
 function ProtectedRoute({ children }) {
   const currentUser = useSensorStore((state) => state.currentUser);
   return currentUser ? children : <Navigate to="/" />;

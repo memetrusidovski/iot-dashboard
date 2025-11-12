@@ -19,5 +19,4 @@ RUN mkdir -p logs
 
 EXPOSE 3001
 
-# Use PM2 to run both processes
 CMD ["pm2-runtime", "processes.json"]

@@ -3,256 +3,184 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>EdgePilot — IoT Device Manager for Teams</title>
-  <meta name="description" content="EdgePilot is a lightweight, secure IoT device manager for teams — deploy, monitor, and manage edge devices at scale with real-time telemetry, secure OTA updates, and zero-touch onboarding.">
-  <meta name="keywords" content="IoT device manager, device monitoring, OTA updates, edge devices, telemetry, fleet management, IoT dashboard">
-  <meta name="author" content="EdgePilot Labs">
+  <title>IoT Magic — Smarter Device Management for the Modern World</title>
+  <meta name="description" content="IoT Magic helps teams securely deploy, monitor, and manage IoT devices at scale — with real-time insights, automatic updates, and intelligent alerting.">
+  <meta name="keywords" content="IoT management, device telemetry, fleet monitoring, OTA updates, IoT dashboard, edge device platform, IoT automation">
+  <meta name="author" content="IoT Magic Labs">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="EdgePilot — IoT Device Manager for Teams">
-  <meta property="og:description" content="Deploy, monitor, and manage your edge device fleet with real-time telemetry, secure OTA, and effortless onboarding.">
+  <meta property="og:title" content="IoT Magic — Smarter Device Management for the Modern World">
+  <meta property="og:description" content="Effortless IoT management platform built for scale. Real-time analytics, automated firmware updates, and secure onboarding in one place.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://iot-magic.com/">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="EdgePilot — IoT Device Manager for Teams">
-  <meta name="twitter:description" content="A fast, secure IoT device manager built for engineers and product teams — real-time alerts, health dashboards, and one-click OTA updates.">
+  <meta name="twitter:title" content="IoT Magic — Smarter Device Management for the Modern World">
+  <meta name="twitter:description" content="Simplify IoT device management with automation, monitoring, and AI-powered insights — built for engineers and operations teams.">
 
-  <!-- Structured data (JSON-LD) -->
+  <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "EdgePilot",
-    "url": "https://example.com/",
-    "description": "EdgePilot — lightweight IoT device manager for teams. Monitor telemetry, manage firmware, and automate alerts.",
-    "applicationCategory": "DeveloperApplication",
+    "name": "IoT Magic",
+    "url": "https://iot-magic.com/",
+    "description": "IoT Magic is an intuitive IoT fleet manager for modern teams — deploy, update, and analyze connected devices at scale.",
+    "applicationCategory": "BusinessApplication",
     "operatingSystem": "All",
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "124"
+      "ratingValue": "4.9",
+      "reviewCount": "207"
     }
   }
   </script>
 
-  <style>
-    :root{
-      --bg:#0f1724; /* deep slate */
-      --muted:#94a3b8;
-      --accent:#2a9d8f; /* teal (from your palette) */
-      --accent-2:#e76f51; /* warm accent */
-      --card:#0b1220;
-      --glass: rgba(255,255,255,0.03);
-      --radius:12px;
-      --max:1100px;
-    }
-    *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;color:#e6eef8;background:linear-gradient(180deg,var(--bg),#08101a);-webkit-font-smoothing:antialiased}
-    .wrap{max-width:var(--max);margin:48px auto;padding:32px}
-
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    .title{font-size:18px;font-weight:600}
-
-    nav .login{padding:10px 16px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent);text-decoration:none;font-weight:600}
-
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-top:8px}
-    .hero-card{background:linear-gradient(180deg,var(--card),rgba(5,10,18,0.6));padding:28px;border-radius:var(--radius);box-shadow:0 6px 24px rgba(2,6,11,0.6);backdrop-filter:blur(6px)}
-    h1{margin:0;font-size:34px;line-height:1.02}
-    p.lead{color:var(--muted);margin-top:10px;font-size:16px}
-
-    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
-    .feature{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-    .feature h4{margin:0;font-size:14px}
-    .feature p{margin:6px 0 0;color:var(--muted);font-size:13px}
-
-    /* right column visual */
-    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-    .screenshot{height:220px;border-radius:8px;background:linear-gradient(180deg,#051728,#08202a);display:flex;flex-direction:column;gap:8px;padding:16px;color:var(--muted)}
-    .screenshot h3{margin:0;color:#dff3ef}
-    .screenshot .metrics{display:flex;gap:8px;margin-top:10px}
-    .metric{flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center}
-    .metric strong{display:block;font-size:20px;color:white}
-    .cta{display:flex;gap:12px;margin-top:18px}
-    .btn-primary{background:linear-gradient(90deg,var(--accent),#188f83);padding:12px 16px;border-radius:10px;color:white;text-decoration:none;font-weight:700;border:none}
-
-    .stats{display:flex;gap:12px;margin-top:28px}
-    .stat{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;text-align:center;flex:1}
-    .stat h4{margin:0;color:white}
-    .stat p{margin:6px 0 0;color:var(--muted)}
-
-    .section{margin-top:44px}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-
-    footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
-
-    /* responsive */
-    @media (max-width:980px){.hero{grid-template-columns:1fr;}.cards{grid-template-columns:1fr 1fr}.wrap{margin:28px auto;padding:20px}}
-    @media (max-width:640px){.cards{grid-template-columns:1fr}.hero{gap:14px}.title{font-size:16px}h1{font-size:26px}}
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="wrap" role="main">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden>EP</div>
+<body class="bg-slate-950 text-slate-100 font-inter">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-12">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-br from-emerald-500 to-teal-400 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white text-lg">IM</div>
         <div>
-          <div class="title">EdgePilot</div>
-          <div style="font-size:12px;color:var(--muted)">IoT device manager — secure, fast, and developer-friendly</div>
+          <div class="text-lg font-semibold">IoT Magic</div>
+          <div class="text-xs text-slate-400">Smart Device Management Platform</div>
         </div>
       </div>
-
-      <!-- ONLY LINK: login -->
-      <nav aria-label="Primary">
-        <a class="login" href="/login">Log in</a>
+      <nav>
+        <a href="http://localhost:5173" class="border border-emerald-500 text-emerald-400 px-4 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-500/10 transition">Log In</a>
       </nav>
     </header>
 
-    <section class="hero">
-      <div class="hero-card">
-        <h1>Manage your edge fleet with confidence</h1>
-        <p class="lead">EdgePilot puts device health, secure OTA updates, and real-time telemetry at the center of your workflow — built for engineering teams that need reliability and scale without the complexity.</p>
+    <!-- Hero -->
+    <section class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="bg-slate-900/60 backdrop-blur-lg rounded-xl p-8 shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-3">Connect. Control. Scale your IoT world effortlessly.</h1>
+        <p class="text-slate-400 mb-6 text-base">IoT Magic gives you complete visibility and control over your connected devices — from secure firmware updates to real-time performance insights — all in one dashboard built for speed and simplicity.</p>
 
-        <div class="features" aria-hidden>
-          <div class="feature">
-            <h4>Zero-touch onboarding</h4>
-            <p>Pre-provision devices during manufacturing or use QR-based onboarding for field technicians.</p>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-white/5 p-3 rounded-md border border-white/5">
+            <h4 class="text-sm font-semibold">Smart Onboarding</h4>
+            <p class="text-xs text-slate-400 mt-1">Plug-and-play device setup with zero manual configuration.</p>
           </div>
-          <div class="feature">
-            <h4>Secure OTA updates</h4>
-            <p>Sign firmware with keys, schedule phased rollouts and rollback safely on failure.</p>
+          <div class="bg-white/5 p-3 rounded-md border border-white/5">
+            <h4 class="text-sm font-semibold">Secure OTA Updates</h4>
+            <p class="text-xs text-slate-400 mt-1">Deploy signed firmware instantly with rollback protection.</p>
           </div>
-          <div class="feature">
-            <h4>Real-time telemetry</h4>
-            <p>Live metrics, alerting, and historical trends to understand device behavior quickly.</p>
+          <div class="bg-white/5 p-3 rounded-md border border-white/5">
+            <h4 class="text-sm font-semibold">Live Telemetry</h4>
+            <p class="text-xs text-slate-400 mt-1">View metrics, alerts, and trends in real time.</p>
           </div>
-          <div class="feature">
-            <h4>Role-based access</h4>
-            <p>Granular permissions for operators, developers, and auditors with audit logs.</p>
+          <div class="bg-white/5 p-3 rounded-md border border-white/5">
+            <h4 class="text-sm font-semibold">Team Controls</h4>
+            <p class="text-xs text-slate-400 mt-1">Role-based access and full audit trails built-in.</p>
           </div>
         </div>
 
-        <div class="cta">
-          <a class="btn-primary" href="/login">Start free trial — Log in</a>
-          <!-- intentionally not linking anywhere else -->
-          <div style="align-self:center;color:var(--muted);font-size:13px">No credit card required</div>
+        <div class="flex items-center gap-3">
+          <a href="/login" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-5 rounded-lg transition">Start Free Trial</a>
+          <p class="text-xs text-slate-400">No credit card required</p>
         </div>
 
-        <div class="stats" role="list" aria-label="Key stats">
-          <div class="stat" role="listitem">
-            <h4>10k+</h4>
-            <p>Devices managed</p>
+        <div class="grid grid-cols-3 gap-3 mt-8 text-center">
+          <div class="bg-white/5 rounded-lg p-3">
+            <h4 class="font-bold text-white text-xl">12k+</h4>
+            <p class="text-xs text-slate-400">Devices online</p>
           </div>
-          <div class="stat" role="listitem">
-            <h4>99.98%</h4>
-            <p>Average uptime</p>
+          <div class="bg-white/5 rounded-lg p-3">
+            <h4 class="font-bold text-white text-xl">99.99%</h4>
+            <p class="text-xs text-slate-400">Service uptime</p>
           </div>
-          <div class="stat" role="listitem">
-            <h4>4.8 ★</h4>
-            <p>Avg. customer rating</p>
+          <div class="bg-white/5 rounded-lg p-3">
+            <h4 class="font-bold text-white text-xl">4.9 ★</h4>
+            <p class="text-xs text-slate-400">Customer rating</p>
           </div>
         </div>
       </div>
 
-      <aside class="panel" aria-label="Product snapshot">
-        <div class="screenshot" role="img" aria-label="Dashboard snapshot">
-          <h3>Live Fleet Snapshot</h3>
-          <div style="font-size:13px;color:var(--muted)">Overview · Alerts · Recent OTA</div>
-
-          <div class="metrics">
-            <div class="metric">
-              <small>Online</small>
-              <strong>9,480</strong>
-            </div>
-            <div class="metric">
-              <small>Offline</small>
-              <strong>512</strong>
-            </div>
-            <div class="metric">
-              <small>Pending OTA</small>
-              <strong>28</strong>
-            </div>
-          </div>
-
-          <div style="margin-top:auto;color:var(--muted);font-size:12px">Secure connection • TLS 1.3 • Signed firmware</div>
+      <!-- Product Preview -->
+      <aside class="bg-gradient-to-b from-slate-900/70 to-transparent rounded-xl p-6 border border-white/5 shadow-inner">
+        <h3 class="text-lg font-semibold mb-2 text-emerald-400">Live Device Overview</h3>
+        <div class="bg-slate-800/50 p-5 rounded-md space-y-3">
+          <div class="flex justify-between text-sm text-slate-300"><span>Devices Online</span><span class="font-bold text-white">11,862</span></div>
+          <div class="flex justify-between text-sm text-slate-300"><span>Pending Updates</span><span class="font-bold text-white">34</span></div>
+          <div class="flex justify-between text-sm text-slate-300"><span>Average Latency</span><span class="font-bold text-white">42ms</span></div>
+          <p class="text-xs text-slate-500 border-t border-white/5 pt-3">Secure • AES-256 • Encrypted telemetry</p>
         </div>
-
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center">
-            <div style="font-size:11px;color:var(--muted)">Avg. alert time</div>
-            <div style="font-weight:700;color:white">18s</div>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <div class="bg-white/5 p-3 rounded-md text-center">
+            <p class="text-xs text-slate-400">Avg. alert time</p>
+            <p class="text-lg font-bold text-white">21s</p>
           </div>
-          <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center">
-            <div style="font-size:11px;color:var(--muted)">Mean time to fix</div>
-            <div style="font-weight:700;color:white">4h 12m</div>
+          <div class="bg-white/5 p-3 rounded-md text-center">
+            <p class="text-xs text-slate-400">MTTR</p>
+            <p class="text-lg font-bold text-white">3h 40m</p>
           </div>
         </div>
       </aside>
     </section>
 
-    <section class="section">
-      <h2 style="color:white;margin:0 0 12px 0">Why teams choose EdgePilot</h2>
-      <div class="cards">
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Built for scale</h3>
-          <p style="margin:0;color:var(--muted)">Designed to orchestrate thousands of devices with low-latency telemetry ingestion and efficient OTA pipelines.</p>
+    <!-- Why Section -->
+    <section class="mt-16">
+      <h2 class="text-2xl font-semibold mb-4">Why teams trust IoT Magic</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <h3 class="font-semibold text-white mb-2">Built for global scale</h3>
+          <p class="text-slate-400 text-sm">Efficient telemetry pipelines and distributed processing make scaling from 10 to 10,000 devices effortless.</p>
         </div>
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Privacy & security</h3>
-          <p style="margin:0;color:var(--muted)">End-to-end encryption, hardware-backed key storage, and immutable audit logs keep your fleet secure.</p>
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <h3 class="font-semibold text-white mb-2">Data privacy by design</h3>
+          <p class="text-slate-400 text-sm">End-to-end encryption, regional data control, and tamper-proof logs ensure full transparency and trust.</p>
         </div>
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Developer-friendly</h3>
-          <p style="margin:0;color:var(--muted)">Open APIs, SDKs for common platforms, and CLI tools let your team automate deployments and diagnostics.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2 style="color:white;margin:0 0 12px 0">Customer stories</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="card">
-          <strong>"EdgePilot cut our debugging time in half"</strong>
-          <p style="margin:8px 0 0;color:var(--muted)">— Hardware lead at a smart meter company. Live telemetry, customizable alerts and rollback saved days during a firmware campaign.</p>
-        </div>
-        <div class="card">
-          <strong>"Zero-touch onboarding made field installs painless"</strong>
-          <p style="margin:8px 0 0;color:var(--muted)">— Operations manager at a logistics startup.</p>
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <h3 class="font-semibold text-white mb-2">Developer-first APIs</h3>
+          <p class="text-slate-400 text-sm">Integrate with your existing workflows using open APIs, webhooks, and command-line tools for full automation.</p>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2 style="color:white;margin:0 0 12px 0">Frequently asked questions</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="card">
-          <strong>How is firmware signed?</strong>
-          <p style="margin:8px 0 0;color:var(--muted)">Firmwares are signed using your private keys; EdgePilot validates signatures on-device before applying updates.</p>
+    <!-- Testimonials -->
+    <section class="mt-16">
+      <h2 class="text-2xl font-semibold mb-4">Customer stories</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <strong>“We reduced our maintenance costs by 40%.”</strong>
+          <p class="text-slate-400 text-sm mt-2">— IoT operations lead, renewable energy startup. IoT Magic helped us automate updates and respond to device issues faster than ever.</p>
         </div>
-        <div class="card">
-          <strong>Can I host EdgePilot on-prem?</strong>
-          <p style="margin:8px 0 0;color:var(--muted)">Yes — EdgePilot supports cloud and self-hosted deployments with the same APIs and tooling.</p>
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <strong>“Onboarding thousands of sensors was seamless.”</strong>
+          <p class="text-slate-400 text-sm mt-2">— VP of Engineering, logistics firm. Zero-touch provisioning saved weeks of manual setup during rollout.</p>
         </div>
       </div>
     </section>
 
-    <footer>
-      <p>© <span id="year"></span> EdgePilot Labs. <span style="color:var(--muted)">A demo IoT device manager for assignment use.</span></p>
+    <!-- FAQ -->
+    <section class="mt-16">
+      <h2 class="text-2xl font-semibold mb-4">Frequently asked questions</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <strong>Can I host IoT Magic on-prem?</strong>
+          <p class="text-slate-400 text-sm mt-2">Yes — IoT Magic can run in your private cloud or datacenter with full feature parity and the same API surface.</p>
+        </div>
+        <div class="bg-slate-900/60 border border-white/5 p-5 rounded-lg">
+          <strong>Does IoT Magic support custom firmware?</strong>
+          <p class="text-slate-400 text-sm mt-2">Absolutely. You can upload and sign your own firmware builds and roll them out to specific device groups.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-16 text-center text-slate-500 text-sm">
+      <p>© <span id="year"></span> IoT Magic Labs — <span class="text-slate-600">A demonstration project for academic use.</span></p>
     </footer>
   </div>
 
   <script>
-    // accessibility: set current year
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // lightweight animation for entrance (no external libs)
-    document.querySelectorAll('.hero-card, .panel, .card').forEach((el,i)=>{
-      el.style.opacity = 0; el.style.transform='translateY(8px)';
-      setTimeout(()=>{el.style.transition='opacity .45s ease,transform .45s ease';el.style.opacity=1;el.style.transform='none'}, 120*i);
-    });
   </script>
 </body>
 </html>

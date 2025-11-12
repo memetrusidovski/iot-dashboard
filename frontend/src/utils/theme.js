@@ -1,4 +1,4 @@
-// Simple theme utility - no context, no providers, just pure functions
+// Simple theme utility without context or providers 
 
 const THEME_KEY = 'app-theme';
 const DARK_MODE_KEY = 'app-dark-mode';

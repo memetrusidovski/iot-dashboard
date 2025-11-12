@@ -1,6 +1,4 @@
 import { create } from 'zustand';
-
-// Assuming you have this helper file for environment-specific URLs
 import { getApiUrl } from '../config/index';
 
 // --- API Helper ---
@@ -249,7 +247,6 @@ const useSensorStore = create((set, get) => ({
     return { devices: newDevices };
   }),
 
-  // NEW: Action that components call to initiate a device deletion
   deleteDevice: async (deviceId) => {
     const userId = get().currentUser;
     if (!userId) return { success: false, error: "No user logged in" };
