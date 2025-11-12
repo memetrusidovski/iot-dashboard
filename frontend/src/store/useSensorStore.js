@@ -134,7 +134,6 @@ const useSensorStore = create((set, get) => ({
   }),
 
   // --- Limit and Alert Actions ---
-
   fetchSensorLimits: async () => {
     const userId = get().currentUser;
     if (!userId) return;
@@ -162,19 +161,7 @@ const useSensorStore = create((set, get) => ({
   setActiveAlert: (alert) => set(state => ({
     activeAlerts: { ...state.activeAlerts, [alert.sensorName]: alert }
   })),
-  /**
-   * BUG FIX & GUIDANCE: "Out of Memory" Error
-   * This error happens when `loadSensorHistory` is called in an infinite loop from a component.
-   * To prevent this, ALWAYS call it from a `useEffect` hook with a proper dependency array.
-   *
-   * Correct Component Usage:
-   * useEffect(() => {
-   *   // This check prevents re-fetching if data is already present
-   *   if (!historyLoaded[sensorName]) {
-   *     loadSensorHistory(sensorName);
-   *   }
-   * }, [sensorName, historyLoaded, loadSensorHistory]);
-   */
+  
   loadSensorHistory: async (sensorName) => {
     const { currentUser, historyLoaded } = get();
     if (!currentUser || historyLoaded[sensorName]) return;
@@ -201,26 +188,6 @@ const useSensorStore = create((set, get) => ({
       console.error(`Failed to load history for ${sensorName}:`, error);
     }
   },
-
-//   updateSensorData: (topic, data) => set((state) => {
-//     if (!topic) return state;
-//     const sensorName = topic.split('/').pop();
-//     const currentHistory = state.sensorHistory[sensorName] || [];
-
-//     const newPoint = {
-//       ...data,
-//       time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-//     };
-
-//     // This is a robust way to add a point and cap the array size
-//     const newHistory = [...currentHistory.slice(-249), newPoint];
-
-//     return {
-//       sensorData: { ...state.sensorData, [sensorName]: data },
-//       sensorHistory: { ...state.sensorHistory, [sensorName]: newHistory },
-//     };
-//   }),
-
 
   // --- Device Actions ---
 
@@ -276,7 +243,7 @@ const useSensorStore = create((set, get) => ({
     }
   },
 
-removeDevice: (deviceId) => set((state) => {
+  removeDevice: (deviceId) => set((state) => {
     const newDevices = { ...state.devices };
     delete newDevices[deviceId];
     return { devices: newDevices };

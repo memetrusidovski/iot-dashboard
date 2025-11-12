@@ -37,14 +37,6 @@ const userData = {
         color: '#FFE4B5',
         lastUpdated: Date.now()
       },
-      thermostat: {
-        type: 'thermostat',
-        name: 'Main Thermostat',
-        state: 'off',
-        targetTemp: 22,
-        mode: 'heat',
-        lastUpdated: Date.now()
-      },
       smart_lock: {
         type: 'lock',
         name: 'Front Door Lock',
@@ -55,6 +47,14 @@ const userData = {
         type: 'door',
         name: 'Garage Door',
         state: 'closed',
+        lastUpdated: Date.now()
+      },
+      thermostat: {
+        type: 'thermostat',
+        name: 'Main Thermostat',
+        state: 'off',
+        targetTemp: 22,
+        mode: 'heat',
         lastUpdated: Date.now()
       }
     }
@@ -188,8 +188,9 @@ const updateDeviceState = (userId, deviceId, updates) => {
   // Update only the provided fields (protect type from being changed)
   Object.keys(updates).forEach(key => {
     if (key !== 'type' && key !== 'lastUpdated') {
-      device[key] = updates[key];
+        device[key] = updates[key];
     }
+
   });
   
   device.lastUpdated = Date.now();

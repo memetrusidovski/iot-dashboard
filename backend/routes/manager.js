@@ -127,7 +127,15 @@ router.post('/api/users/:userId/devices/:deviceId/toggle', (req, res) => {
   }
   
   // Toggle the state between on/off
-  const newState = device.state === 'on' ? 'off' : 'on';
+  var newState = device.state === 'on' ? 'off' : 'on';
+
+  // if device.type === 'door' or device.type === 'lock' use 'locked'/'unlocked' instead
+    if (device.type === 'lock') {
+      newState = device.state === 'locked' ? 'unlocked' : 'locked';
+    }else if (device.type === 'door') {
+      newState = device.state === 'open' ? 'closed' : 'open';
+    }
+
   const result = db.updateDeviceState(userId, deviceId, { state: newState });
   
   // Broadcast to WebSocket for real-time UI updates

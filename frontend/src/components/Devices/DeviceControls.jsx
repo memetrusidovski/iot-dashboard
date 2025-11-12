@@ -1,6 +1,6 @@
 import React from 'react';
 import useSensorStore from '../../store/useSensorStore';
-import { Power, Plus, Minus, Lock, Unlock } from 'lucide-react';
+import { Power, Plus, Minus, Lock, Unlock, DoorClosed } from 'lucide-react';
 
 // --- Individual Control Components ---
 
@@ -132,6 +132,50 @@ const LockControls = ({ deviceId, device }) => {
   );
 };
 
+const DoorControls = ({ deviceId, device }) => {
+  const toggleDevice = useSensorStore((state) => state.toggleDevice);
+  const isClosed = device.state === 'closed';
+  
+  return (
+    <div className="space-y-3">
+      <div className={`p-4 rounded-lg border-2 transition-colors ${
+        isClosed 
+          ? 'bg-green-500/5 border-green-500/20' 
+          : 'bg-orange-500/5 border-orange-500/20'
+      }`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`p-2 rounded-full ${
+              isClosed ? 'bg-green-500/10' : 'bg-orange-500/10'
+            }`}>
+              <DoorClosed size={20} className={isClosed ? 'text-green-600' : 'text-orange-600'} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">
+                {isClosed ? 'Closed' : 'Open'}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {isClosed ? 'Door is closed' : 'Door is open'}
+              </p>
+            </div>
+          </div>
+          
+          <button
+            onClick={() => toggleDevice(deviceId)}
+            className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+              isClosed
+                ? 'bg-green-600 text-white hover:bg-green-700'
+                : 'bg-orange-600 text-white hover:bg-orange-700'
+            }`}
+          >
+            {isClosed ? 'Open' : 'Close'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const FanControls = ({ deviceId, device }) => {
   const setDeviceState = useSensorStore((state) => state.setDeviceState);
   const speeds = ['low', 'medium', 'high'];
@@ -161,12 +205,64 @@ const FanControls = ({ deviceId, device }) => {
   );
 };
 
+const PlugControls = ({ device }) => {
+  if (device.powerUsage) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between p-3 bg-green-500/5 rounded-lg border border-green-500/20">
+          <span className="text-sm text-muted-foreground">Power Usage</span>
+          <span className="text-lg font-bold text-green-600">{device.powerUsage}W</span>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+const CameraControls = ({ device }) => {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between p-3 bg-red-500/5 rounded-lg border border-red-500/20">
+        <span className="text-sm text-muted-foreground">Recording</span>
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${device.recording ? 'bg-red-500 animate-pulse' : 'bg-muted'}`} />
+          <span className="text-sm font-medium text-foreground">
+            {device.recording ? 'Active' : 'Inactive'}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SprinklerControls = ({ device }) => {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between p-3 bg-blue-500/5 rounded-lg border border-blue-500/20">
+        <span className="text-sm text-muted-foreground">Zone</span>
+        <span className="text-lg font-bold text-blue-600">Zone {device.zone}</span>
+      </div>
+    </div>
+  );
+};
+
+const PurifierControls = ({ device }) => {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between p-3 bg-purple-500/5 rounded-lg border border-purple-500/20">
+        <span className="text-sm text-muted-foreground">Mode</span>
+        <span className="text-sm font-medium text-foreground capitalize">{device.mode}</span>
+      </div>
+    </div>
+  );
+};
+
 // --- Main Control Switch ---
 
 const DeviceControls = ({ deviceId, device }) => {
   const toggleDevice = useSensorStore((state) => state.toggleDevice);
   
-  // Devices that support toggle (locks are handled differently)
+  // Devices that support toggle (locks and doors are handled differently)
   const hasToggle = ['light', 'thermostat', 'fan', 'plug', 'camera', 'sprinkler', 'purifier'].includes(device.type);
   const isOn = device.state === 'on';
 
@@ -178,8 +274,18 @@ const DeviceControls = ({ deviceId, device }) => {
         return <ThermostatControls deviceId={deviceId} device={device} />;
       case 'lock':
         return <LockControls deviceId={deviceId} device={device} />;
+      case 'door':
+        return <DoorControls deviceId={deviceId} device={device} />;
       case 'fan':
         return <FanControls deviceId={deviceId} device={device} />;
+      case 'plug':
+        return <PlugControls device={device} />;
+      case 'camera':
+        return <CameraControls device={device} />;
+      case 'sprinkler':
+        return <SprinklerControls device={device} />;
+      case 'purifier':
+        return <PurifierControls device={device} />;
       default:
         return null;
     }
@@ -189,7 +295,7 @@ const DeviceControls = ({ deviceId, device }) => {
     <div className="space-y-4">
       {renderSpecificControls()}
       
-      {/* Power Toggle Button (for non-lock devices) */}
+      {/* Power Toggle Button (for non-lock/door devices) */}
       {hasToggle && (
         <button
           onClick={() => toggleDevice(deviceId)}
