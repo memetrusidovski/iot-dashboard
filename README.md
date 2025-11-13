@@ -41,3 +41,16 @@ Your server should now be running.
 Visit: http://localhost:3001
 Visit: http://localhost:5173
 
+## Bug Fixes
+
+Bug 1: temperature += Math.random() * 5;
+This caused the temperature to grow without bounds.
+temperature += (Math.random() - 0.5) * 2; // fluctuate ±1°C with low probability of moving far from the base temp
+
+Bug 2: console.log('Error occurred');
+
+```
+client.on('error', (err) => {
+  console.error('MQTT Error:', err.message);
+});
+```
