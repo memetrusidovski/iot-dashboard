@@ -23,8 +23,9 @@ const useWebSocket = (userId) => {
         
         // Check the message type to decide which store action to call
         if (message.type === 'device_update') {
+          console.log('Received device update via WebSocket:', message);
           updateDeviceState(message.deviceId, message.device);
-        } else if (message.type === 'device_deleted') { // NEW: Handle deletion
+        } else if (message.type === 'device_deleted') {
           removeDevice(message.deviceId);
         } else if (message.type === 'limits_updated') {
           setSensorLimit(message.sensorName, message.limits);

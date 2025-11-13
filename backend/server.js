@@ -93,23 +93,33 @@ mqttClient.on('message', (topic, message) => {
     // Check if sensor value exceeds configured limits
     const alert = db.checkSensorLimits(userId, sensorName, data.value);
     
-    // Broadcast to user's WebSocket connection for real-time updates
-    const userConnection = db.userData[userId].ws;
-    if (userConnection && userConnection.readyState === WebSocket.OPEN) {
-      // Send sensor data update
-      userConnection.send(JSON.stringify({ topic, data }));
-      
-      // Send alert if limit exceeded
-      if (alert) {
-        console.log(`[ALERT] ${userId} - ${alert.message}`);
-        userConnection.send(JSON.stringify({ 
-          type: 'sensor_alert',
-          userId,
-          alert,
-          timestamp: Date.now()
-        }));
-      }
+    // Broadcast to all user's WebSocket connections for real-time updates
+    const userConnections = db.userData[userId].ws;
+
+    if (!userConnections || userConnections.length === 0) {
+      return; // No active WebSocket connections for this user
     }
+
+    // Send to all connected clients for this user
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === WebSocket.OPEN) {
+        const limits = db.userData[userId].sensorLimits[sensorName];
+        // Send sensor data update
+        userConnection.send(JSON.stringify({ topic, data, limits }));
+        
+        // Send alert if limit exceeded
+        if (alert) {
+          console.log(`[ALERT] ${userId} - ${alert.message}`);
+          userConnection.send(JSON.stringify({ 
+            type: 'sensor_alert',
+            userId,
+            alert,
+            timestamp: Date.now()
+          }));
+        }
+      }
+    });
+
   } catch (err) {
     console.error('[MQTT] Error processing message:', err);
   }
@@ -142,17 +152,29 @@ wss.on('connection', (ws, req) => {
   console.log(`[WebSocket] Client connected for user: ${userId}`);
   
   // Associate WebSocket with user
-  db.userData[userId].ws = ws;
+  // Store multiple connections to support multiple browser windows
+  if (!db.userData[userId].ws) {
+    db.userData[userId].ws = [];
+  }
+  db.userData[userId].ws.push(ws);
+  console.log(`[WebSocket] Active connections for ${userId}: ${db.userData[userId].ws.length}`);
 
   // Handle client disconnect
   ws.on('close', () => {
     console.log(`[WebSocket] Client disconnected for user: ${userId}`);
-    db.userData[userId].ws = null;
+    // Remove this specific connection from array
+    db.userData[userId].ws = db.userData[userId].ws.filter(
+      connection => connection !== ws
+    );
+    console.log(`[WebSocket] Active connections for ${userId}: ${db.userData[userId].ws.length}`);
   });
 
-  // Handle WebSocket errors
   ws.on('error', (error) => {
     console.error(`[WebSocket] Error for user ${userId}:`, error);
+    // Remove on error too
+    db.userData[userId].ws = db.userData[userId].ws.filter(
+      connection => connection !== ws
+    );
   });
 });
 // -----------END: WebSocket Server-----------
@@ -276,15 +298,19 @@ app.post('/api/users/:userId/sensors/:sensorName/limits', (req, res) => {
     return res.status(404).json({ error: result.error });
   }
   
-  // Broadcast to WebSocket for real-time UI updates
-  const userConnection = db.userData[userId].ws;
-  if (userConnection && userConnection.readyState === WebSocket.OPEN) {
-    userConnection.send(JSON.stringify({
-      type: 'limits_updated',
-      userId,
-      sensorName,
-      limits: result.limits
-    }));
+  // Broadcast to all WebSocket connections for real-time UI updates
+  const userConnections = db.userData[userId].ws;
+  if (userConnections && userConnections.length > 0) {
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === WebSocket.OPEN) {
+        userConnection.send(JSON.stringify({
+          type: 'limits_updated',
+          userId,
+          sensorName,
+          limits: result.limits
+        }));
+      }
+    });
   }
   
   res.json({ 

@@ -203,12 +203,15 @@ const useSensorStore = create((set, get) => ({
   },
 
   // This single action handles state updates from WebSockets for both existing and new devices
-  updateDeviceState: (deviceId, device) => set((state) => ({
-    devices: {
-      ...state.devices,
-      [deviceId]: device,
-    }
-  })),
+  updateDeviceState: (deviceId, device) => set((state) => {
+    state.devices[deviceId] = device; // Update existing device if present
+    return {
+      devices: {
+        ...state.devices,
+        [deviceId]: device,
+      }
+    };
+  }),
 
   toggleDevice: (deviceId) => {
     const userId = get().currentUser;

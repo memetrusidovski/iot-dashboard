@@ -84,18 +84,21 @@ router.post('/api/users/:userId/devices/:deviceId/state', (req, res) => {
     return res.status(404).json({ error: result.error });
   }
   
-  // Broadcast to WebSocket for real-time UI updates
+  // Broadcast to all WebSocket connections for real-time UI updates
   const userData = req.app.get('userData');
   if (userData && userData[userId] && userData[userId].ws) {
-    const ws = userData[userId].ws;
-    if (ws.readyState === 1) { // WebSocket.OPEN
-      ws.send(JSON.stringify({
-        type: 'device_update',
-        userId,
-        deviceId,
-        device: result.device
-      }));
-    }
+    const userConnections = userData[userId].ws;
+    // Send to all connected clients for this user
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === 1) { // WebSocket.OPEN
+        userConnection.send(JSON.stringify({
+          type: 'device_update',
+          userId,
+          deviceId,
+          device: result.device
+        }));
+      }
+    });
   }
   
   res.json({ 
@@ -130,26 +133,29 @@ router.post('/api/users/:userId/devices/:deviceId/toggle', (req, res) => {
   var newState = device.state === 'on' ? 'off' : 'on';
 
   // if device.type === 'door' or device.type === 'lock' use 'locked'/'unlocked' instead
-    if (device.type === 'lock') {
-      newState = device.state === 'locked' ? 'unlocked' : 'locked';
-    }else if (device.type === 'door') {
-      newState = device.state === 'open' ? 'closed' : 'open';
-    }
+  if (device.type === 'lock') {
+    newState = device.state === 'locked' ? 'unlocked' : 'locked';
+  } else if (device.type === 'door') {
+    newState = device.state === 'open' ? 'closed' : 'open';
+  }
 
   const result = db.updateDeviceState(userId, deviceId, { state: newState });
   
-  // Broadcast to WebSocket for real-time UI updates
+  // Broadcast to all WebSocket connections for real-time UI updates
   const userData = req.app.get('userData');
   if (userData && userData[userId] && userData[userId].ws) {
-    const ws = userData[userId].ws;
-    if (ws.readyState === 1) {
-      ws.send(JSON.stringify({
-        type: 'device_update',
-        userId,
-        deviceId,
-        device: result.device
-      }));
-    }
+    const userConnections = userData[userId].ws;
+    // Send to all connected clients for this user
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === 1) {
+        userConnection.send(JSON.stringify({
+          type: 'device_update',
+          userId,
+          deviceId,
+          device: result.device
+        }));
+      }
+    });
   }
   
   res.json({ 
@@ -241,18 +247,21 @@ router.post('/api/users/:userId/devices', (req, res) => {
     return res.status(statusCode).json({ error: result.error });
   }
   
-  // Broadcast to WebSocket for real-time UI updates
+  // Broadcast to all WebSocket connections for real-time UI updates
   const userData = req.app.get('userData');
   if (userData && userData[userId] && userData[userId].ws) {
-    const ws = userData[userId].ws;
-    if (ws.readyState === 1) {
-      ws.send(JSON.stringify({
-        type: 'device_added',
-        userId,
-        deviceId,
-        device: result.device
-      }));
-    }
+    const userConnections = userData[userId].ws;
+    // Send to all connected clients for this user
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === 1) {
+        userConnection.send(JSON.stringify({
+          type: 'device_added',
+          userId,
+          deviceId,
+          device: result.device
+        }));
+      }
+    });
   }
   
   res.status(201).json({ 
@@ -286,17 +295,20 @@ router.delete('/api/users/:userId/devices/:deviceId', (req, res) => {
     return res.status(404).json({ error: result.error });
   }
   
-  // Broadcast to WebSocket for real-time UI updates
+  // Broadcast to all WebSocket connections for real-time UI updates
   const userData = req.app.get('userData');
   if (userData && userData[userId] && userData[userId].ws) {
-    const ws = userData[userId].ws;
-    if (ws.readyState === 1) {
-      ws.send(JSON.stringify({
-        type: 'device_deleted',
-        userId,
-        deviceId
-      }));
-    }
+    const userConnections = userData[userId].ws;
+    // Send to all connected clients for this user
+    userConnections.forEach(userConnection => {
+      if (userConnection && userConnection.readyState === 1) {
+        userConnection.send(JSON.stringify({
+          type: 'device_deleted',
+          userId,
+          deviceId
+        }));
+      }
+    });
   }
   
   res.json({ 

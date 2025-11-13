@@ -11,7 +11,7 @@
  */
 const userData = {
   alice: { 
-    ws: null, 
+    ws: [], 
     sensorDataHistory: { 
       temperature: [], 
       humidity: [] 
@@ -60,7 +60,7 @@ const userData = {
     }
   },
   bob: { 
-    ws: null, 
+    ws: [], 
     sensorDataHistory: { 
       pressure: [], 
       light_level: [] 
@@ -103,7 +103,7 @@ const userData = {
     }
   },
   steve: { 
-    ws: null, 
+    ws: [], 
     sensorDataHistory: { 
       temperature: [], 
       co2: [] 
